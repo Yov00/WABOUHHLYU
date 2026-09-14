@@ -28,8 +28,9 @@ func (app *application) mount() http.Handler {
 	r := chi.NewRouter()
 
 	// Middleware
-	r.Use(middleware.RequestID) // good for rate limiting
-	r.Use(middleware.RealIP)    // again for rate limiting and analytics/tracing
+	r.Use(middleware.RequestID)                              // good for rate limiting
+	r.Use(middleware.ClientIPFromHeader("CF-Connecting-IP")) // again for rate limiting and analytics/tracing
+	// r.Use(middleware.ClientIPFromHeader("X-Real-IP")) // again for rate limiting and analytics/tracing
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
